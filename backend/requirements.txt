@@ -1,0 +1,17 @@
+flask==3.0.3
+flask-cors==4.0.1
+langchain==0.2.16
+langchain-google-genai==1.0.10
+langchain-core==0.2.38
+google-generativeai==0.7.2
+pillow==10.4.0
+opencv-python-headless==4.10.0.84
+pyzbar==0.1.9
+qrcode==7.4.2
+reportlab==4.2.2
+requests==2.32.3
+beautifulsoup4==4.12.3
+python-dotenv==1.0.1
+sqlalchemy==2.0.35
+urllib3==2.2.3
+numpy==1.26.4
