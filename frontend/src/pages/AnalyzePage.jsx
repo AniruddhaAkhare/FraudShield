@@ -23,7 +23,7 @@ function TextPanel({ loading, onSubmit }) {
       <div className="panel-title">💬 Text &amp; Message Analysis</div>
       <div className="panel-desc">
         Paste WhatsApp messages, SMS, tweets, emails, or any social media content.
-        The AI will detect phishing, scams, social engineering, and threatening language.
+        BERT analyses messages, emails, and extracted text to detect scam language, impersonation, threats, urgency, and fraudulent requests.
       </div>
       <label className="field-label">Message / Content</label>
       <textarea
@@ -37,7 +37,7 @@ function TextPanel({ loading, onSubmit }) {
         <button className="sample-btn" onClick={() => setMsg(LEGIT_SAMPLE)}>Try Legitimate Sample</button>
       </div>
       <button className="analyze-btn" disabled={loading} onClick={() => onSubmit('text', msg)}>
-        {loading ? '⏳ Analyzing…' : '🧠 Run AI Fraud Detection'}
+        {loading ? '⏳ Analyzing…' : '💬 Run BERT Text Detection'}
       </button>
     </div>
   )
@@ -51,8 +51,8 @@ function UrlPanel({ loading, onSubmit }) {
     <div className="input-panel">
       <div className="panel-title">🔗 URL &amp; Link Analysis</div>
       <div className="panel-desc">
-        Enter any suspicious URL or link. The AI will inspect the domain, page content,
-        redirect chains, and detect phishing or malware indicators.
+        Enter any suspicious URL or link. XGBoost classifies URLs using features such as
+        URL length, domain structure, suspicious characters, and other URL threat indicators.
       </div>
       <label className="field-label">URL / Link</label>
       <div className="url-wrapper">
@@ -70,7 +70,7 @@ function UrlPanel({ loading, onSubmit }) {
         </div>
       </div>
       <button className="analyze-btn" disabled={loading} onClick={() => onSubmit('url', url)}>
-        {loading ? '⏳ Analyzing…' : '🔗 Analyze URL'}
+        {loading ? '⏳ Analyzing…' : '🔗 Run XGBoost URL Analysis'}
       </button>
     </div>
   )
@@ -82,7 +82,7 @@ function ImagePanel({ loading, onSubmit }) {
   const DETECTS = [
     ['📄','Document Fraud','Fake IDs, certificates, court orders'],
     ['📸','Screenshot Analysis','Fake conversations, receipts'],
-    ['🤖','AI-Generated Images','Deepfakes, synthetic media'],
+    ['🎨','Synthetic / Forged Media','Deepfakes, manipulated graphics'],
     ['🏷️','Brand Impersonation','Misused logos, fake seals'],
   ]
   return (
@@ -90,7 +90,7 @@ function ImagePanel({ loading, onSubmit }) {
       <div className="panel-title">🖼️ Image &amp; Screenshot Analysis</div>
       <div className="panel-desc">
         Upload screenshots of messages, government documents, notices, fake receipts,
-        or any suspicious image. Vision AI will extract text and detect visual fraud.
+        or any suspicious image. Vision Transformer (ViT) analyses visual impersonation patterns while OCR extracts text for analysis.
       </div>
       <FileDropZone onFile={setFile} label="Image"/>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(170px,1fr))', gap:10, margin:'1.5rem 0' }}>
@@ -103,7 +103,7 @@ function ImagePanel({ loading, onSubmit }) {
         ))}
       </div>
       <button className="analyze-btn" disabled={loading || !file} onClick={() => onSubmit('image', file)}>
-        {loading ? '⏳ Analyzing…' : '🖼️ Analyze Image'}
+        {loading ? '⏳ Analyzing…' : '🖼️ Run ViT & OCR Analysis'}
       </button>
     </div>
   )
@@ -117,8 +117,8 @@ function QrPanel({ loading, onSubmit }) {
     <div className="input-panel">
       <div className="panel-title">📱 QR Code Analysis</div>
       <div className="panel-desc">
-        Upload an image containing a QR code. FraudShield will decode the QR content
-        and perform a full fraud analysis — URLs, payment info, contacts, and more.
+        Upload an image containing a QR code. QR Code Decoding extracts URLs or text
+        and routes the content to the appropriate detection module.
       </div>
       <FileDropZone onFile={setFile} label="QR Code Image" green/>
       <div style={{ margin:'1.5rem 0', padding:'1rem', borderRadius:'var(--radius-sm)', background:'rgba(16,185,129,0.06)', border:'1px solid rgba(16,185,129,0.15)' }}>

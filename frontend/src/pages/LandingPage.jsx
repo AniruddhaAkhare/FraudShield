@@ -6,12 +6,12 @@ const SCAM_TAGS = [
   ['🎣','Phishing Attack'], ['💰','Financial Scam'], ['🪪','Identity Theft'],
   ['🏛️','Fake Authority'], ['🎰','Lottery / Prize Scam'], ['📈','Investment Fraud'],
   ['💕','Romance Scam'],   ['💻','Tech Support Scam'],  ['💼','Employment Scam'],
-  ['🤖','AI-Generated Fake'], ['🦠','Malware / Ransomware'], ['📋','Counterfeit Document'],
+  ['🎨','Synthetic / Forged Media'], ['🦠','Malware / Ransomware'], ['📋','Counterfeit Document'],
 ]
 
 const FEATURES = [
   { icon: '📊', bg: 'fi-purple', span: 7, title: 'On-Screen Risk Assessment',
-    desc: 'Instant visual risk score (0–100), color-coded risk level (LOW → CRITICAL), scam classification, and AI confidence — displayed in a stunning bento dashboard.',
+    desc: 'Instant visual risk score (0–100), color-coded risk level (LOW → CRITICAL), scam classification, and model confidence — displayed in a stunning bento dashboard.',
     extra: (
       <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginTop:'1.2rem' }}>
         {['CRITICAL','HIGH','MEDIUM','LOW'].map(l => (
@@ -27,22 +27,22 @@ const FEATURES = [
 ]
 
 const INPUT_TYPES = [
-  { icon: '💬', type: 'text',  label: 'Text & Messages',    model: 'Model 01',
-    desc: 'WhatsApp, SMS, Twitter, social media posts, emails.' },
-  { icon: '🔗', type: 'url',   label: 'URLs & Links',       model: 'Model 02',
-    desc: 'Analyze suspicious links for phishing and malware.' },
-  { icon: '🖼️', type: 'image', label: 'Images & Screenshots', model: 'Model 03',
-    desc: 'Detect fake docs, AI images, and manipulated screenshots.' },
-  { icon: '📱', type: 'qr',    label: 'QR Codes',           model: 'Model 04',
-    desc: 'Decode and analyze QR codes for payment fraud.' },
+  { icon: '💬', type: 'text',  label: 'Text & Messages',    model: 'BERT',
+    desc: 'Analyses messages, emails, and extracted text to detect scam language, impersonation, threats, urgency, and fraudulent requests.' },
+  { icon: '🔗', type: 'url',   label: 'URLs & Links',       model: 'XGBoost',
+    desc: 'Classifies URLs using features such as URL length, domain structure, suspicious characters, and other URL indicators.' },
+  { icon: '🖼️', type: 'image', label: 'Images & Screenshots', model: 'Vision Transformer (ViT) + OCR',
+    desc: 'Analyses screenshots and images for visual impersonation patterns via ViT; OCR extracts text so it can be analysed by BERT.' },
+  { icon: '📱', type: 'qr',    label: 'QR Codes',           model: 'QR Code Decoding',
+    desc: 'Extracts URLs or text from QR codes and routes the content to the appropriate detection module.' },
 ]
 
 const STEPS = [
-  { n:'1', title:'Select Input Type',  desc:'Choose from text, URL, image/screenshot, or QR code.' },
-  { n:'2', title:'Submit Evidence',    desc:'Paste your message, URL, or upload your file.' },
-  { n:'3', title:'AI Detection',       desc:'Dedicated AI model analyzes input for fraud signals.' },
-  { n:'4', title:'Get Results',        desc:'Receive a full bento-grid report with all outputs.' },
-  { n:'5', title:'Download Report',    desc:'Export a professional PDF report for sharing.' },
+  { n:'1', title:'Select Input Type',      desc:'Choose from text, URL, image/screenshot, or QR code.' },
+  { n:'2', title:'Submit Evidence',        desc:'Paste your message, URL, or upload your file.' },
+  { n:'3', title:'Feature Classification', desc:'Dedicated BERT, XGBoost, ViT, or QR decoder extracts and evaluates features.' },
+  { n:'4', title:'Multimodal Risk Fusion', desc:'Combines outputs from available models into an overall risk score and category.' },
+  { n:'5', title:'Download Report',        desc:'Export a professional PDF report for sharing.' },
 ]
 
 function Particles() {
@@ -83,11 +83,11 @@ export default function LandingPage() {
         <div className="hero-grid"/>
         <Particles/>
         <div className="hero-content">
-          <div className="hero-badge">⚡ AI-Powered • Real-Time • Multi-Modal</div>
+          <div className="hero-badge">⚡ Real-Time • Multi-Modal Detection Architecture</div>
           <h1 className="hero-title">Detect Fraud<br/>Before It Strikes</h1>
           <p className="hero-subtitle">
             FraudShield analyzes text messages, URLs, images, and QR codes using
-            four specialized AI models — delivering instant risk scores, detailed threat
+            BERT, XGBoost, Vision Transformers (ViT), and OCR — delivering instant risk scores, detailed threat
             analysis, and actionable security recommendations.
           </p>
           <div className="hero-cta">
@@ -100,7 +100,7 @@ export default function LandingPage() {
             {[
               { v: stats.total,      l: 'Analyses Run' },
               { v: stats.fraud,      l: 'Frauds Detected' },
-              { v: 4,                l: 'AI Models Active' },
+              { v: 4,                l: 'Detection Modules' },
               { v: stats.fraud_rate+'%', l: 'Fraud Rate' },
             ].map(s => (
               <div key={s.l} className="stat-item">
@@ -115,9 +115,9 @@ export default function LandingPage() {
       {/* ── Input Types ── */}
       <div style={{ background: 'linear-gradient(180deg,transparent,rgba(124,58,237,0.04),transparent)' }}>
         <div className="section">
-          <div className="section-label">⚡ Multi-Modal Detection</div>
+          <div className="section-label">⚡ Multi-Modal Architecture</div>
           <h2 className="section-title">Choose Your Input Type</h2>
-          <p className="section-subtitle">FraudShield has a dedicated AI model for each input type, ensuring maximum accuracy.</p>
+          <p className="section-subtitle">FraudShield deploys dedicated detection architectures for each input type, combined via Multimodal Risk Fusion.</p>
           <div className="bento-grid" style={{ marginTop: '2rem' }}>
             {INPUT_TYPES.map(t => (
               <div key={t.type}
@@ -206,7 +206,7 @@ export default function LandingPage() {
 
       {/* ── Footer ── */}
       <footer style={{ borderTop:'1px solid rgba(255,255,255,0.06)', padding:'2rem', textAlign:'center', color:'var(--text-muted)', fontSize:'0.82rem' }}>
-        FraudShield © 2024 — AI-Powered Fraud Detection. Built with React, Flask &amp; LangChain.
+        FraudShield © 2026 — Multimodal Fraud Detection System. Built with React &amp; Flask.
       </footer>
     </>
   )

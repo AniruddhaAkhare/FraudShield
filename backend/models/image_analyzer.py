@@ -223,7 +223,7 @@ def analyze_image(image_path: str) -> dict:
             model = genai.GenerativeModel(GEMINI_VISION_MODEL, system_instruction=SYSTEM_PROMPT)
             
             pil_img = PILImage.open(image_path)
-            res = model.generate_content(["Analyze this document/screenshot/image for fraud. Return ONLY raw JSON.", pil_img], request_options={"timeout": 10})
+            res = model.generate_content(["Analyze this document/screenshot/image for fraud. Return ONLY raw JSON.", pil_img], request_options={"timeout": 40})
             raw = res.text
             raw = re.sub(r"```(?:json)?", "", raw).strip().strip("`").strip()
 

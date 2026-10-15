@@ -45,7 +45,7 @@ export default function RiskGauge({ score, level, confidence, scamType }) {
 
       <div className="conf-wrap">
         <div className="conf-top">
-          <span>AI Confidence</span>
+          <span>Confidence Score</span>
           <span>{Math.round(confidence)}%</span>
         </div>
         <div className="conf-track">

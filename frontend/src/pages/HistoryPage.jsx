@@ -136,7 +136,7 @@ export default function HistoryPage() {
                   <th>#</th>
                   <th>Type</th>
                   <th>Content Preview</th>
-                  <th>Engine</th>
+                  <th>Module</th>
                   <th>Scam Type</th>
                   <th>Risk Score</th>
                   <th>Level</th>
@@ -163,12 +163,14 @@ export default function HistoryPage() {
                     <td>
                       <span style={{
                         fontSize: '0.72rem', fontWeight: 600, padding: '2px 8px', borderRadius: 12,
-                        background: r.is_ai_generated !== false ? 'rgba(34,197,94,0.12)' : 'rgba(234,179,8,0.12)',
-                        color: r.is_ai_generated !== false ? '#4ade80' : '#facc15',
-                        border: r.is_ai_generated !== false ? '1px solid rgba(34,197,94,0.25)' : '1px solid rgba(234,179,8,0.25)',
+                        background: 'rgba(34,197,94,0.12)',
+                        color: '#4ade80',
+                        border: '1px solid rgba(34,197,94,0.25)',
                         whiteSpace: 'nowrap', display: 'inline-block'
                       }}>
-                        {r.is_ai_generated !== false ? '✨ Gemini AI' : '⚙️ Heuristic'}
+                        {r.input_type === 'text' ? 'BERT' :
+                         r.input_type === 'url' ? 'XGBoost' :
+                         r.input_type === 'image' ? 'Vision Transformer (ViT)' : 'QR Decoding'}
                       </span>
                     </td>
                     <td style={{ fontSize:'0.85rem' }}>{r.scam_type}</td>

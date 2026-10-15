@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 
 const STEPS = [
   { icon: '🔍', label: 'Extracting input features…' },
-  { icon: '🧠', label: 'Running AI fraud detection model…' },
-  { icon: '📊', label: 'Computing risk score & confidence…' },
+  { icon: '⚡', label: 'Running classification & pattern analysis…' },
+  { icon: '📊', label: 'Applying Multimodal Risk Fusion…' },
   { icon: '🔐', label: 'Generating security recommendations…' },
   { icon: '💾', label: 'Saving analysis to database…' },
 ]
@@ -42,11 +42,11 @@ export default function LoadingOverlay({ active }) {
             strokeDasharray="251" strokeDashoffset="100"
             style={{ animation: 'spin 2s linear infinite reverse', transformOrigin: 'center' }}/>
         </svg>
-        <div className="loader-icon">🧠</div>
+        <div className="loader-icon">🛡️</div>
       </div>
 
-      <div className="loading-title">AI Fraud Detection in Progress</div>
-      <div className="loading-sub">Our model is deeply analyzing your submission…</div>
+      <div className="loading-title">Fraud Detection in Progress</div>
+      <div className="loading-sub">Running feature extraction, classification & multimodal risk fusion…</div>
 
       <div className="loading-steps">
         {STEPS.map((s, i) => (

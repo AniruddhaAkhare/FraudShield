@@ -242,7 +242,7 @@ def analyze_url(url: str) -> dict:
             model = genai.GenerativeModel(GEMINI_MODEL, system_instruction=SYSTEM_PROMPT)
             prompt = USER_PROMPT.format(url=url, domain=domain, path=path, query=query, page_preview=page_preview[:800])
 
-            res = model.generate_content(prompt, request_options={"timeout": 8})
+            res = model.generate_content(prompt, request_options={"timeout": 40})
             raw = res.text
             raw = re.sub(r"```(?:json)?", "", raw).strip().strip("`").strip()
 

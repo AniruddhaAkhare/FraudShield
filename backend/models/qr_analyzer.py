@@ -296,7 +296,7 @@ def analyze_qr(image_path: str) -> dict:
             
             prompt_text = f"Analyze this QR code for fraud.\nDecoded content: {decoded_content}\nData type: {data_type}\nFilename: {os.path.basename(image_path)}\nReturn ONLY raw JSON."
             pil_img = PILImage.open(image_path)
-            res = model.generate_content([prompt_text, pil_img], request_options={"timeout": 10})
+            res = model.generate_content([prompt_text, pil_img], request_options={"timeout": 40})
             raw = res.text
             raw = re.sub(r"```(?:json)?", "", raw).strip().strip("`").strip()
 
