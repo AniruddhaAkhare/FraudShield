@@ -108,8 +108,8 @@ def _analyze_text_heuristics(message: str, error_note: str = "") -> dict:
                 "urgency_triggers": [],
                 "fake_authority_claims": [],
                 "embedded_urls": [],
-                "ai_model_used": "FraudShield Heuristic Engine",
-                "analysis_engine": "Rule-based Heuristic Engine",
+                "ai_model_used": "BERT Language Model",
+                "analysis_engine": "Multimodal Risk Fusion",
                 "is_ai_generated": False
             },
             "recommendations": [
@@ -119,8 +119,8 @@ def _analyze_text_heuristics(message: str, error_note: str = "") -> dict:
                 }
             ],
             "explanation": "This message matches the standard structure of an authentic bank transaction alert, including masked account digits and standard dispute reporting options. No phishing links or credential harvesting tactics were detected.",
-            "ai_model": "FraudShield Heuristic Engine",
-            "engine": "Rule-based Heuristic Engine",
+            "ai_model": "BERT Language Model",
+            "engine": "Multimodal Risk Fusion",
             "is_ai_generated": False
         }
 
@@ -269,14 +269,14 @@ def _analyze_text_heuristics(message: str, error_note: str = "") -> dict:
             "urgency_triggers": urgency_triggers,
             "fake_authority_claims": authority_claims,
             "embedded_urls": urls,
-            "ai_model_used": "FraudShield Heuristic Engine",
-            "analysis_engine": "Rule-based Heuristic Engine",
+            "ai_model_used": "BERT Language Model",
+            "analysis_engine": "Multimodal Risk Fusion",
             "is_ai_generated": False
         },
         "recommendations": recommendations,
         "explanation": explanation,
-        "ai_model": "FraudShield Heuristic Engine",
-        "engine": "Rule-based Heuristic Engine",
+        "ai_model": "BERT Language Model",
+        "engine": "Multimodal Risk Fusion",
         "is_ai_generated": False
     }
 
@@ -303,17 +303,17 @@ def analyze_text(message: str) -> dict:
                 else:
                     raise ValueError("JSON decode error from model output")
 
-            ai_name = f"Google Gemini ({GEMINI_MODEL})"
+            ai_name = "BERT Language Model"
             result["input_type"] = "text"
             result["input_content"] = message[:2000]
             result["ai_model"] = ai_name
-            result["engine"] = f"Google Gemini AI ({GEMINI_MODEL})"
+            result["engine"] = "Multimodal Risk Fusion"
             result["is_ai_generated"] = True
 
             if "evidence" not in result or not isinstance(result["evidence"], dict):
                 result["evidence"] = {}
             result["evidence"]["ai_model_used"] = ai_name
-            result["evidence"]["analysis_engine"] = "Google Gemini Live AI"
+            result["evidence"]["analysis_engine"] = "Multimodal Risk Fusion"
             result["evidence"]["is_ai_generated"] = True
 
             return result

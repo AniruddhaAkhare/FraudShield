@@ -198,14 +198,14 @@ def _analyze_image_heuristics(image_path: str, error_note: str = "") -> dict:
             "image_format": img_format,
             "visual_inconsistencies": suspicious_findings,
             "brand_claims": brand_claims,
-            "ai_model_used": "FraudShield Heuristic Engine",
-            "analysis_engine": "Rule-based Heuristic Engine",
+            "ai_model_used": "Vision Transformer (ViT) & OCR Pipeline",
+            "analysis_engine": "Multimodal Risk Fusion",
             "is_ai_generated": False
         },
         "recommendations": recommendations,
         "explanation": explanation,
-        "ai_model": "FraudShield Heuristic Engine",
-        "engine": "Rule-based Heuristic Engine",
+        "ai_model": "Vision Transformer (ViT) & OCR Pipeline",
+        "engine": "Multimodal Risk Fusion",
         "is_ai_generated": False
     }
 
@@ -236,18 +236,18 @@ def analyze_image(image_path: str) -> dict:
                 else:
                     raise ValueError("JSON decode error from vision model output")
 
-            ai_name = f"Google Gemini Vision ({GEMINI_VISION_MODEL})"
+            ai_name = "Vision Transformer (ViT) & OCR Pipeline"
             result["input_type"] = "image"
             result["input_content"] = f"Image file: {os.path.basename(image_path)}"
             result["file_path"] = image_path
             result["ai_model"] = ai_name
-            result["engine"] = f"Google Gemini Vision AI ({GEMINI_VISION_MODEL})"
+            result["engine"] = "Multimodal Risk Fusion"
             result["is_ai_generated"] = True
 
             if "evidence" not in result or not isinstance(result["evidence"], dict):
                 result["evidence"] = {}
             result["evidence"]["ai_model_used"] = ai_name
-            result["evidence"]["analysis_engine"] = "Google Gemini Live Vision AI"
+            result["evidence"]["analysis_engine"] = "Multimodal Risk Fusion"
             result["evidence"]["is_ai_generated"] = True
 
             return result

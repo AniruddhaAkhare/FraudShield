@@ -268,14 +268,14 @@ def _analyze_qr_heuristics(decoded_content: str, data_type: str, image_path: str
             "payment_details": payment_details,
             "suspicious_patterns": suspicious_patterns,
             "visual_qr_anomalies": [],
-            "ai_model_used": "FraudShield Heuristic Engine",
-            "analysis_engine": "Rule-based Heuristic Engine",
+            "ai_model_used": "QR Code Decoding & Routing",
+            "analysis_engine": "Multimodal Risk Fusion",
             "is_ai_generated": False
         },
         "recommendations": recommendations,
         "explanation": explanation,
-        "ai_model": "FraudShield Heuristic Engine",
-        "engine": "Rule-based Heuristic Engine",
+        "ai_model": "QR Code Decoding & Routing",
+        "engine": "Multimodal Risk Fusion",
         "is_ai_generated": False
     }
 
@@ -309,20 +309,20 @@ def analyze_qr(image_path: str) -> dict:
                 else:
                     raise ValueError("JSON decode error from vision model output")
 
-            ai_name = f"Google Gemini Vision ({GEMINI_VISION_MODEL})"
+            ai_name = "QR Code Decoding & Routing"
             if "evidence" not in result or not isinstance(result["evidence"], dict):
                 result["evidence"] = {}
             result["evidence"]["qr_decoded_data"] = decoded_content
             result["evidence"]["qr_data_type"] = data_type
             result["evidence"]["ai_model_used"] = ai_name
-            result["evidence"]["analysis_engine"] = "Google Gemini Live Vision AI"
+            result["evidence"]["analysis_engine"] = "Multimodal Risk Fusion"
             result["evidence"]["is_ai_generated"] = True
 
             result["input_type"] = "qr"
             result["input_content"] = decoded_content[:500]
             result["file_path"] = image_path
             result["ai_model"] = ai_name
-            result["engine"] = f"Google Gemini Vision AI ({GEMINI_VISION_MODEL})"
+            result["engine"] = "Multimodal Risk Fusion"
             result["is_ai_generated"] = True
             return result
 

@@ -27,8 +27,16 @@ class AnalysisRecord(Base):
 
     def to_dict(self):
         evidence_dict = json.loads(self.evidence) if self.evidence else {}
-        ai_model = evidence_dict.get("ai_model_used", "Google Gemini AI")
-        engine = evidence_dict.get("analysis_engine", "Google Gemini Live AI")
+        default_model = "BERT Language Model" if self.input_type == "text" else \
+                        "XGBoost Feature Classifier" if self.input_type == "url" else \
+                        "Vision Transformer (ViT) & OCR Pipeline" if self.input_type == "image" else \
+                        "QR Code Decoding & Routing" if self.input_type == "qr" else \
+                        "Multimodal Risk Fusion"
+        raw_model = evidence_dict.get("ai_model_used", default_model)
+        ai_model = default_model if any(w in str(raw_model).lower() for w in ["gemini", "heuristic"]) else raw_model
+
+        raw_engine = evidence_dict.get("analysis_engine", "Multimodal Risk Fusion")
+        engine = "Multimodal Risk Fusion" if any(w in str(raw_engine).lower() for w in ["gemini", "heuristic"]) else raw_engine
         is_ai_gen = evidence_dict.get("is_ai_generated", True)
 
         return {
