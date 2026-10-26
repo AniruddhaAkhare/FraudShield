@@ -13,6 +13,10 @@ export const analyzeQr = (file) => {
   const fd = new FormData(); fd.append('file', file)
   return api.post('/api/analyze/qr', fd)
 }
+export const analyzeAudio = (file) => {
+  const fd = new FormData(); fd.append('file', file)
+  return api.post('/api/analyze/audio', fd)
+}
 
 export const fetchHistory    = ()   => api.get('/api/history')
 export const fetchAnalysis   = (id) => api.get(`/api/analysis/${id}`)

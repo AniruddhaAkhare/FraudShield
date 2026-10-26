@@ -1,15 +1,17 @@
 import { useState, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { analyzeText, analyzeUrl, analyzeImage, analyzeQr } from '../api/client.js'
+import { analyzeText, analyzeUrl, analyzeImage, analyzeQr, analyzeAudio } from '../api/client.js'
 import { useToast } from '../context/ToastContext.jsx'
 import LoadingOverlay from '../components/LoadingOverlay.jsx'
 import FileDropZone from '../components/FileDropZone.jsx'
+import AudioDropZone from '../components/AudioDropZone.jsx'
 
 const TYPES = [
   { key: 'text',  icon: '💬', label: 'Text / Message' },
   { key: 'url',   icon: '🔗', label: 'URL / Link' },
   { key: 'image', icon: '🖼️', label: 'Image / Screenshot' },
   { key: 'qr',    icon: '📱', label: 'QR Code' },
+  { key: 'audio', icon: '🎙️', label: 'Call Recording' },
 ]
 
 const PHISHING_SAMPLE = `URGENT! Your bank account has been temporarily suspended due to suspicious activity. Click the link immediately to restore access: http://secure-banking-verify.tk/restore?id=user123&token=xyz. Failure to verify within 24 hours will result in permanent account closure. — ICICI Bank Security Team`
@@ -134,6 +136,47 @@ function QrPanel({ loading, onSubmit }) {
   )
 }
 
+/* ─── Audio Panel ── */
+function AudioPanel({ loading, onSubmit }) {
+  const [file, setFile] = useState(null)
+  const SCAM_VECTORS = [
+    ['🚨', 'Digital Arrest Scams', 'Fake CBI, police, customs, ED warrants & call isolation'],
+    ['🏦', 'Bank & KYC Vishing', 'Urgent freeze threats, OTP/PIN credential harvesting'],
+    ['📦', 'Courier / Parcel Interception', 'Fake FedEx/DHL illegal narcotics parcel demands'],
+    ['🤖', 'AI Voice Clone Extortion', 'Fake family emergency, accident, or kidnapping scripts'],
+  ]
+  return (
+    <div className="input-panel">
+      <div className="panel-title">🎙️ Call Recording &amp; Voice Scam Analysis</div>
+      <div className="panel-desc">
+        Upload call recordings, voicemails, or audio evidence (.mp3, .wav, .m4a, .aac, .ogg, .flac).
+        Speech Acoustic &amp; Vishing Pipeline transcribes conversations, detects authority impersonation (digital arrest, police, bank), high-pressure psychological coercion, and illicit payment demands.
+      </div>
+      <AudioDropZone onFile={setFile} />
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(190px,1fr))', gap:10, margin:'1.5rem 0' }}>
+        {SCAM_VECTORS.map(([ic, t, d]) => (
+          <div key={t} style={{ padding:12, borderRadius:'var(--radius-sm)', background:'rgba(255,255,255,0.03)', border:'1px solid var(--border-subtle)' }}>
+            <div style={{ fontSize:'1.2rem', marginBottom:4 }}>{ic}</div>
+            <div style={{ fontSize:'0.82rem', fontWeight:600, marginBottom:2 }}>{t}</div>
+            <div style={{ fontSize:'0.75rem', color:'var(--text-muted)' }}>{d}</div>
+          </div>
+        ))}
+      </div>
+      <button
+        className="analyze-btn"
+        style={{
+          background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+          boxShadow: '0 4px 18px rgba(236,72,153,0.3)'
+        }}
+        disabled={loading || !file}
+        onClick={() => onSubmit('audio', file)}
+      >
+        {loading ? '⏳ Analyzing Call Audio & Transcribing…' : '🎙️ Run Speech & Vishing Analysis'}
+      </button>
+    </div>
+  )
+}
+
 /* ─── Main Page ── */
 export default function AnalyzePage() {
   const [params]    = useSearchParams()
@@ -153,12 +196,22 @@ export default function AnalyzePage() {
       if (type === 'url')   res = await analyzeUrl(data)
       if (type === 'image') res = await analyzeImage(data)
       if (type === 'qr')    res = await analyzeQr(data)
+      if (type === 'audio') res = await analyzeAudio(data)
 
-      const analysis = res.data?.analysis
-      if (analysis?.id) navigate(`/result/${analysis.id}`)
-      else showToast(res.data?.error || 'Analysis failed.', 'error')
+      if (!res || !res.data) {
+        showToast('No response received from detection server.', 'error')
+        return
+      }
+
+      const analysis = res.data.analysis
+      if (analysis?.id) {
+        navigate(`/result/${analysis.id}`)
+      } else {
+        showToast(res.data.error || 'Analysis failed.', 'error')
+      }
     } catch (e) {
-      showToast(e.response?.data?.error || 'Network error — is the server running?', 'error')
+      console.error('Analysis submission error:', e)
+      showToast(e.response?.data?.error || e.message || 'Network error — is the server running?', 'error')
     } finally {
       setLoading(false)
     }
@@ -191,6 +244,7 @@ export default function AnalyzePage() {
         {activeType === 'url'   && <UrlPanel   loading={loading} onSubmit={handleSubmit}/>}
         {activeType === 'image' && <ImagePanel loading={loading} onSubmit={handleSubmit}/>}
         {activeType === 'qr'    && <QrPanel    loading={loading} onSubmit={handleSubmit}/>}
+        {activeType === 'audio' && <AudioPanel loading={loading} onSubmit={handleSubmit}/>}
       </div>
     </>
   )

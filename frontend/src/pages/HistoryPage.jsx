@@ -2,8 +2,8 @@ import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchHistory, downloadReport } from '../api/client.js'
 
-const TYPE_CLASS = { text:'type-text', url:'type-url', image:'type-image', qr:'type-qr' }
-const TYPE_ICON  = { text:'💬 TEXT', url:'🔗 URL', image:'🖼️ IMAGE', qr:'📱 QR' }
+const TYPE_CLASS = { text:'type-text', url:'type-url', image:'type-image', qr:'type-qr', audio:'type-audio' }
+const TYPE_ICON  = { text:'💬 TEXT', url:'🔗 URL', image:'🖼️ IMAGE', qr:'📱 QR', audio:'🎙️ AUDIO' }
 const RISK_COLOR = { CRITICAL:'#ef4444', HIGH:'#f97316', MEDIUM:'#eab308', LOW:'#22c55e' }
 
 function ScoreBar({ score, level }) {
@@ -76,11 +76,11 @@ export default function HistoryPage() {
       {/* Type Distribution */}
       {records.length > 0 && (
         <div style={{ display:'flex', gap:12, flexWrap:'wrap', marginBottom:'1.5rem' }}>
-          {['text','url','image','qr'].map(t => {
+          {['text','url','image','qr','audio'].map(t => {
             const count = records.filter(r => r.input_type === t).length
             return (
               <div key={t} style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 16px', borderRadius:'var(--radius-sm)', background:'var(--bg-card)', border:'1px solid var(--border-subtle)' }}>
-                <span className={`type-badge ${TYPE_CLASS[t]}`}>{TYPE_ICON[t]}</span>
+                <span className={`type-badge ${TYPE_CLASS[t] || ''}`}>{TYPE_ICON[t] || t.toUpperCase()}</span>
                 <span style={{ fontWeight:700 }}>{count}</span>
               </div>
             )
@@ -102,6 +102,7 @@ export default function HistoryPage() {
             <option value="url">🔗 URL</option>
             <option value="image">🖼️ Image</option>
             <option value="qr">📱 QR Code</option>
+            <option value="audio">🎙️ Call Recording</option>
           </select>
           <select className="filter-select" value={verdictFilter} onChange={e => setVerdictFilter(e.target.value)}>
             <option value="all">All Verdicts</option>

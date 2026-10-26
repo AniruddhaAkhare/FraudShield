@@ -51,6 +51,11 @@ def _get_module_info(input_type: str) -> dict:
             "module": "QR Code Decoding & Routing",
             "engine": "Multimodal Risk Fusion"
         }
+    elif it == "audio":
+        return {
+            "module": "Speech Acoustic & Vishing Analysis Pipeline",
+            "engine": "Multimodal Risk Fusion"
+        }
     return {
         "module": "Multimodal Risk Fusion",
         "engine": "Multimodal Risk Fusion Pipeline"

@@ -35,12 +35,14 @@ const INPUT_TYPES = [
     desc: 'Analyses screenshots and images for visual impersonation patterns via ViT; OCR extracts text so it can be analysed by BERT.' },
   { icon: '📱', type: 'qr',    label: 'QR Codes',           model: 'QR Code Decoding',
     desc: 'Extracts URLs or text from QR codes and routes the content to the appropriate detection module.' },
+  { icon: '🎙️', type: 'audio', label: 'Call Recordings',   model: 'Speech Acoustic Pipeline',
+    desc: 'Evaluates phone calls for digital arrest extortion, fake police/CBI threats, bank KYC vishing, and synthetic AI voice cloning.' },
 ]
 
 const STEPS = [
-  { n:'1', title:'Select Input Type',      desc:'Choose from text, URL, image/screenshot, or QR code.' },
-  { n:'2', title:'Submit Evidence',        desc:'Paste your message, URL, or upload your file.' },
-  { n:'3', title:'Feature Classification', desc:'Dedicated BERT, XGBoost, ViT, or QR decoder extracts and evaluates features.' },
+  { n:'1', title:'Select Input Type',      desc:'Choose from text, URL, image, QR code, or call audio recording.' },
+  { n:'2', title:'Submit Evidence',        desc:'Paste message/URL, or upload your document/image/call recording.' },
+  { n:'3', title:'Feature Classification', desc:'Dedicated BERT, XGBoost, ViT, QR decoder, or Speech Acoustic Pipeline extracts and evaluates features.' },
   { n:'4', title:'Multimodal Risk Fusion', desc:'Combines outputs from available models into an overall risk score and category.' },
   { n:'5', title:'Download Report',        desc:'Export a professional PDF report for sharing.' },
 ]
@@ -86,8 +88,8 @@ export default function LandingPage() {
           <div className="hero-badge">⚡ Real-Time • Multi-Modal Detection Architecture</div>
           <h1 className="hero-title">Detect Fraud<br/>Before It Strikes</h1>
           <p className="hero-subtitle">
-            FraudShield analyzes text messages, URLs, images, and QR codes using
-            BERT, XGBoost, Vision Transformers (ViT), and OCR — delivering instant risk scores, detailed threat
+            FraudShield analyzes text messages, URLs, images, QR codes, and voice call recordings using
+            BERT, XGBoost, Vision Transformers (ViT), OCR, and Speech Acoustic Pipelines — delivering instant risk scores, detailed threat
             analysis, and actionable security recommendations.
           </p>
           <div className="hero-cta">
@@ -100,7 +102,7 @@ export default function LandingPage() {
             {[
               { v: stats.total,      l: 'Analyses Run' },
               { v: stats.fraud,      l: 'Frauds Detected' },
-              { v: 4,                l: 'Detection Modules' },
+              { v: 5,                l: 'Detection Modules' },
               { v: stats.fraud_rate+'%', l: 'Fraud Rate' },
             ].map(s => (
               <div key={s.l} className="stat-item">
@@ -118,11 +120,11 @@ export default function LandingPage() {
           <div className="section-label">⚡ Multi-Modal Architecture</div>
           <h2 className="section-title">Choose Your Input Type</h2>
           <p className="section-subtitle">FraudShield deploys dedicated detection architectures for each input type, combined via Multimodal Risk Fusion.</p>
-          <div className="bento-grid" style={{ marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '1.25rem', marginTop: '2rem' }}>
             {INPUT_TYPES.map(t => (
               <div key={t.type}
                 className="bento-card input-card"
-                style={{ gridColumn: 'span 3', cursor: 'pointer' }}
+                style={{ cursor: 'pointer', textAlign: 'center' }}
                 onClick={() => navigate(`/analyze?type=${t.type}`)}>
                 <div className="bento-icon fi-purple" style={{ margin: '0 auto 1rem' }}>{t.icon}</div>
                 <h3>{t.label}</h3>

@@ -21,6 +21,9 @@ IMAGE_ANALYZER_API_KEY = os.getenv("IMAGE_ANALYZER_API_KEY", "")
 # Model 4: QR Code Analysis
 QR_ANALYZER_API_KEY = os.getenv("QR_ANALYZER_API_KEY", "")
 
+# Model 5: Audio / Call Recording Fraud Analysis
+AUDIO_ANALYZER_API_KEY = os.getenv("AUDIO_ANALYZER_API_KEY") or os.getenv("TEXT_ANALYZER_API_KEY", "")
+
 # Flask config
 SECRET_KEY = os.getenv("SECRET_KEY", "fraudshield-ultra-secret-key-2024")
 DEBUG = os.getenv("DEBUG", "True") == "True"
@@ -36,11 +39,15 @@ except Exception:
 # Gemini model settings
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
 GEMINI_VISION_MODEL = os.getenv("GEMINI_VISION_MODEL", "gemini-3.1-flash-lite")
+GEMINI_AUDIO_MODEL = os.getenv("GEMINI_AUDIO_MODEL", "gemini-2.5-flash")
 
 # Upload settings
 UPLOAD_FOLDER = "uploads"
-MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "bmp", "webp", "pdf"}
+MAX_CONTENT_LENGTH = 32 * 1024 * 1024  # 32 MB
+ALLOWED_EXTENSIONS = {
+    "png", "jpg", "jpeg", "gif", "bmp", "webp", "pdf",
+    "mp3", "wav", "m4a", "ogg", "aac", "flac", "webm", "wma", "opus"
+}
 
 # Risk thresholds
 RISK_THRESHOLDS = {
@@ -63,5 +70,9 @@ SCAM_TYPES = [
     "AI-Generated Fake",
     "Malware / Ransomware",
     "Counterfeit Document",
+    "Digital Arrest Scam",
+    "Vishing / Phone Scam",
+    "Customs Parcel Scam",
+    "AI Voice Clone Extortion",
     "No Fraud Detected",
 ]

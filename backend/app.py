@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
@@ -134,6 +134,35 @@ def api_analyze_qr():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/analyze/audio", methods=["POST"])
+def api_analyze_audio():
+    try:
+        if "file" not in request.files:
+            return jsonify({"error": "No call recording audio file uploaded"}), 400
+        file = request.files["file"]
+        if file.filename == "":
+            return jsonify({"error": "Empty filename"}), 400
+        if not allowed_file(file.filename):
+            return jsonify({"error": "Invalid audio file format. Supported: MP3, WAV, M4A, OGG, AAC, FLAC, WEBM."}), 400
+
+        file_path = _save_uploaded_file(file)
+
+        from models.audio_analyzer import analyze_audio
+        result = analyze_audio(file_path)
+        result = build_summary(result)
+        saved = save_analysis(Session, result)
+        return jsonify({"success": True, "analysis": saved, "redirect": f"/result/{saved['id']}"})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/uploads/<path:filename>", methods=["GET"])
+def api_serve_upload(filename):
+    """Serve uploaded media files (call audio recordings, images)."""
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
 @app.route("/api/report/<int:record_id>", methods=["GET"])

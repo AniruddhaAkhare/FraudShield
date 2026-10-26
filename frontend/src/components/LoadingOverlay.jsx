@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const STEPS = [
-  { icon: '🔍', label: 'Extracting input features…' },
-  { icon: '⚡', label: 'Running classification & pattern analysis…' },
+  { icon: '🔍', label: 'Extracting audio waveforms & features…' },
+  { icon: '⚡', label: 'Running speech recognition & acoustic classification…' },
   { icon: '📊', label: 'Applying Multimodal Risk Fusion…' },
   { icon: '🔐', label: 'Generating security recommendations…' },
   { icon: '💾', label: 'Saving analysis to database…' },
@@ -11,18 +11,43 @@ const STEPS = [
 export default function LoadingOverlay({ active }) {
   const [stepIdx, setStepIdx] = useState(0)
   const [done, setDone] = useState([])
+  const [elapsed, setElapsed] = useState(0)
 
   useEffect(() => {
-    if (!active) { setStepIdx(0); setDone([]); return }
+    if (!active) {
+      setStepIdx(0)
+      setDone([])
+      setElapsed(0)
+      return
+    }
+
+    const timer = setInterval(() => {
+      setElapsed(e => e + 1)
+    }, 1000)
+
     let i = 0
+    let stepTimer = null
+
     const tick = () => {
-      if (i > 0) setDone(d => [...d, i - 1])
+      setDone(d => (i > 0 && !d.includes(i - 1) ? [...d, i - 1] : d))
       setStepIdx(i)
       i++
-      if (i < STEPS.length) setTimeout(tick, 900 + Math.random() * 400)
+      if (i < STEPS.length) {
+        stepTimer = setTimeout(tick, 1000 + Math.random() * 400)
+      } else {
+        // Complete the final step after a short moment
+        stepTimer = setTimeout(() => {
+          setDone(d => [...new Set([...d, STEPS.length - 1])])
+        }, 1200)
+      }
     }
-    const t = setTimeout(tick, 300)
-    return () => clearTimeout(t)
+
+    stepTimer = setTimeout(tick, 300)
+
+    return () => {
+      clearInterval(timer)
+      if (stepTimer) clearTimeout(stepTimer)
+    }
   }, [active])
 
   if (!active) return null
@@ -34,7 +59,7 @@ export default function LoadingOverlay({ active }) {
         <svg viewBox="0 0 130 130">
           <circle className="gauge-track" cx="65" cy="65" r="56" strokeWidth="10"/>
           <circle cx="65" cy="65" r="56" fill="none" strokeWidth="10"
-            stroke="#7c3aed" strokeLinecap="round"
+            stroke="#ec4899" strokeLinecap="round"
             strokeDasharray="352" strokeDashoffset="120"
             style={{ animation: 'spin 1.5s linear infinite', transformOrigin: 'center' }}/>
           <circle cx="65" cy="65" r="40" fill="none" strokeWidth="6"
@@ -46,7 +71,11 @@ export default function LoadingOverlay({ active }) {
       </div>
 
       <div className="loading-title">Fraud Detection in Progress</div>
-      <div className="loading-sub">Running feature extraction, classification & multimodal risk fusion…</div>
+      <div className="loading-sub">
+        {elapsed > 6
+          ? 'Transcribing audio conversation & verifying social engineering tactics…'
+          : 'Running feature extraction, classification & multimodal risk fusion…'}
+      </div>
 
       <div className="loading-steps">
         {STEPS.map((s, i) => (
@@ -56,6 +85,13 @@ export default function LoadingOverlay({ active }) {
           </div>
         ))}
       </div>
+
+      {elapsed > 10 && (
+        <div style={{ marginTop: 14, fontSize: '0.82rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ animation: 'pulse 1.2s infinite' }}>⏳</span>
+          <span>Audio transcription in progress ({elapsed}s elapsed) — finalizing report…</span>
+        </div>
+      )}
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>

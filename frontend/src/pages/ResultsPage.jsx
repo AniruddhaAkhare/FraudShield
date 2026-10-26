@@ -5,8 +5,8 @@ import { useToast } from '../context/ToastContext.jsx'
 import RiskGauge from '../components/RiskGauge.jsx'
 
 const RISK_COLORS = { CRITICAL:'#ef4444', HIGH:'#f97316', MEDIUM:'#eab308', LOW:'#22c55e' }
-const TYPE_CLASS  = { text:'type-text', url:'type-url', image:'type-image', qr:'type-qr' }
-const TYPE_ICON   = { text:'💬', url:'🔗', image:'🖼️', qr:'📱' }
+const TYPE_CLASS  = { text:'type-text', url:'type-url', image:'type-image', qr:'type-qr', audio:'type-audio' }
+const TYPE_ICON   = { text:'💬', url:'🔗', image:'🖼️', qr:'📱', audio:'🎙️' }
 
 function CardHeader({ icon, iconCls, title, count }) {
   return (
@@ -44,6 +44,12 @@ function getModelInfo(inputType) {
         fullName: 'QR Code Decoding & Feature Routing',
         description: 'Extracts URLs or text from QR codes and routes the content to the appropriate detection module.',
       }
+    case 'audio':
+      return {
+        name: 'Speech Acoustic & Vishing Pipeline',
+        fullName: 'Speech Acoustic & Vishing Analysis Pipeline',
+        description: 'Transcribes and evaluates call audio for authority impersonation (digital arrest, police, bank), high-pressure psychological coercion, and illicit payment demands.',
+      }
     default:
       return {
         name: 'Multimodal Risk Fusion',
@@ -57,13 +63,16 @@ function cleanAiTerms(str, inputType) {
   if (!str || typeof str !== 'string') return str
   const model = getModelInfo(inputType)
   return str
+    .replace(/Google Gemini Audio \([^)]*\)/gi, 'Speech Acoustic Pipeline')
     .replace(/Google Gemini Vision \([^)]*\)/gi, 'Vision Transformer (ViT)')
     .replace(/Google Gemini AI \([^)]*\)/gi, model.fullName)
     .replace(/Google Gemini Live Vision AI/gi, 'Vision Transformer (ViT) & OCR')
     .replace(/Google Gemini Live AI/gi, 'Multimodal Risk Fusion')
     .replace(/Google Gemini AI/gi, model.fullName)
+    .replace(/Google Gemini Audio/gi, model.fullName)
     .replace(/Google Gemini/gi, model.name)
     .replace(/Gemini Vision/gi, 'Vision Transformer (ViT)')
+    .replace(/Gemini Audio/gi, model.fullName)
     .replace(/Gemini AI/gi, model.name)
     .replace(/Gemini/gi, model.name)
     .replace(/FraudShield Heuristic Engine/gi, model.fullName)
@@ -332,10 +341,26 @@ export default function ResultsPage() {
                 padding:12, borderRadius:8, background:'rgba(255,255,255,0.03)',
                 border:'1px solid var(--border-subtle)', fontSize:'0.85rem',
                 color:'var(--text-secondary)', wordBreak:'break-all',
-                maxHeight:120, overflowY:'auto',
+                maxHeight: input_type === 'audio' || input_type === 'image' ? 'none' : 120,
+                overflowY:'auto',
                 fontFamily: ['url','qr'].includes(input_type) ? "'JetBrains Mono',monospace" : 'inherit'
               }}>
-                {String(input_content).slice(0,600)}{String(input_content).length > 600 ? '…' : ''}
+                <div>{String(input_content).slice(0,600)}{String(input_content).length > 600 ? '…' : ''}</div>
+
+                {input_type === 'audio' && analysis.file_url && (
+                  <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: 'rgba(236,72,153,0.06)', border: '1px solid rgba(236,72,153,0.2)' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#f472b6', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span>🎙️</span> Call Recording Playback
+                    </div>
+                    <audio controls style={{ width: '100%', height: 40 }} src={analysis.file_url} />
+                  </div>
+                )}
+
+                {input_type === 'image' && analysis.file_url && (
+                  <div style={{ marginTop: 12 }}>
+                    <img src={analysis.file_url} alt="Analyzed Evidence" style={{ maxHeight: 220, maxWidth: '100%', borderRadius: 6, border: '1px solid var(--border-subtle)' }} />
+                  </div>
+                )}
               </div>
             </div>
           )}
